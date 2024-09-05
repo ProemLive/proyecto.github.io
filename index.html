@@ -1,0 +1,63 @@
+HTML
+<body>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Muebles</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<div class="navbar">
+    <!-- Barra de navegación -->
+    <a href="index.html">Inicio</a>
+    <a href="catalogo.html">Catálogo</a>
+    <a href="carrito.html">Carrito</a>
+    <a href="cuenta.html">Mi Cuenta</a>
+</div>
+
+    <header>
+        <h1>Tienda de Muebles de Oficina </h1>
+        <input type="text" id="search" placeholder="Buscar productos..." onkeyup="searchProducts()">
+    </header>
+
+    <!-- Catálogo de productos -->
+    <main>
+        <section id="product-catalog">
+            <!-- Productos agregados dinámicamente por JavaScript -->
+        </section>
+    </main>
+
+    <!-- Carrito de compras -->
+    <aside id="shopping-cart">
+        <h2>Carrito de Compras</h2>
+        <div id="cart-items">
+            <!-- Items del carrito agregados dinámicamente por JavaScript -->
+        </div>
+        <p>Total: $<span id="cart-total">0.00</span></p>
+        <button onclick="checkout()">Pagar</button>
+    </aside>
+
+<script>
+  const stripe = Stripe('your-publishable-key-here');
+  const checkoutButton = document.getElementById('checkout-button');
+
+  checkoutButton.addEventListener('click', () => {
+    fetch('/create-checkout-session', {
+      method: 'POST',
+    })
+    .then((response) => response.json())
+    .then((sessionId) => {
+      return stripe.redirectToCheckout({ sessionId });
+    })
+    .then((result) => {
+      if (result.error) {
+        alert(result.error.message);
+      }
+    });
+  });
+</script>
+  
+</body>
+</html>
