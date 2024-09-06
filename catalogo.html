@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Productos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Catálogo de Productos</h1>
+        <input type="text" id="search" placeholder="Buscar productos..." onkeyup="searchProducts()">
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="mesas.html">Mesas</a></li>
+            <li><a href="sillas.html">Sillas</a></li>
+            <li><a href="adornos.html">Adornos</a></li>
+            <li><a href="lamparas.html">Lámparas</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="product-catalog">
+            <!-- Productos del catálogo se mostrarán aquí -->
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Tienda de Muebles</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
