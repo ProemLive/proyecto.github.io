@@ -1,23 +1,113 @@
+<body>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Productos</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
-</head>
-<body>
-    <div class="navbar">
-    <!-- Barra de navegación -->
-    <a href="index.html">Inicio</a>
-    <a href="catalogo.html">Catálogo</a>
-    <a href="carrito.html">Carrito</a>
-    <a href="cuenta.html">Mi Cuenta</a>
-</div>
+    <title>Tienda de Muebles</title>
+    <style>
+        /* Estilos globales para la página */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0;
+            padding: 0;
+        }
 
+        header {
+            width: 100%;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+            text-align: center;
+        }
+
+        header input {
+            margin-top: 10px;
+            padding: 10px;
+            width: 50%;
+        }
+
+        #product-catalog {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+            width: 70%; /* Ancho predeterminado del catálogo de productos */
+        }
+
+        #product-catalog .product {
+            border: 1px solid #ddd;
+            margin: 10px;
+            padding: 10px;
+            width: calc(33.333% - 40px);
+            box-sizing: border-box;
+        }
+
+        #product-catalog .product img {
+            width: 100%;
+        }
+
+        #shopping-cart {
+            width: 25%; /* Ajusta el ancho predeterminado del carrito de compras aquí */
+            padding: 20px;
+            background-color: #f4f4f4;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        /* Media Queries para hacer que el diseño sea responsivo */
+        @media (max-width: 768px) {
+            #product-catalog {
+                width: 100%; /* Catálogo de productos toma el 100% del ancho */
+            }
+
+            #product-catalog .product {
+                width: calc(50% - 20px); /* Ajusta el ancho de los productos */
+            }
+
+            #shopping-cart {
+                width: 100%; /* Carrito de compras toma el 100% del ancho */
+            }
+        }
+
+        @media (max-width: 500px) {
+            #product-catalog {
+                width: 100%; /* Catálogo de productos sigue tomando el 100% del ancho */
+            }
+
+            #product-catalog .product {
+                width: calc(50% - 20px); /* Ajusta el ancho de los productos */
+            }
+
+            #shopping-cart {
+                width: 100%; /* Carrito de compras sigue tomando el 100% del ancho */
+            }
+        }
+
+        @media (max-width: 300px) {
+            #product-catalog .product {
+                width: 100%; /* Cada producto toma el 100% del ancho */
+            }
+
+            #shopping-cart {
+                width: 100%; /* Carrito de compras sigue tomando el 100% del ancho */
+            }
+        }
+    </style>
+</head>
+
+    <!-- Barra de navegación -->
+    <div class="navbar">
+        <a href="index.html">Inicio</a>
+        <a href="catalogo.html">Catálogo</a>
+        <a href="carrito.html">Carrito</a>
+        <a href="cuenta.html">Mi Cuenta</a>
+    </div>
+
+    <!-- Encabezado -->
     <header>
-        <h1>Tienda de Muebles de Oficina </h1>
+        <h1>Tienda de Muebles de Oficina</h1>
         <input type="text" id="search" placeholder="Buscar productos..." onkeyup="searchProducts()">
     </header>
 
@@ -28,6 +118,10 @@
         </section>
     </main>
 
+  
+  
+  
+  
     <!-- Carrito de compras -->
     <aside id="shopping-cart">
         <h2>Carrito de Compras</h2>
@@ -35,27 +129,346 @@
             <!-- Items del carrito agregados dinámicamente por JavaScript -->
         </div>
         <p>Total: $<span id="cart-total">0.00</span></p>
-        <button onclick="checkout()">Pagar</button>
+        <button id="checkout-button">Pagar</button>
     </aside>
+<script src="https://js.stripe.com/v3/"></script>
 
 <script>
-  const stripe = Stripe('your-publishable-key-here');
-  const checkoutButton = document.getElementById('checkout-button');
+    const stripe = Stripe('your-publishable-key-here'); // Reemplaza con tu clave pública
+    const checkoutButton = document.getElementById('checkout-button');
 
-  checkoutButton.addEventListener('click', () => {
-    fetch('/create-checkout-session', {
-      method: 'POST',
-    })
-    .then((response) => response.json())
-    .then((sessionId) => {
-      return stripe.redirectToCheckout({ sessionId });
-    })
-    .then((result) => {
-      if (result.error) {
-        alert(result.error.message);
-      }
+    checkoutButton.addEventListener('click', () => {
+        fetch('/create-checkout-session', {
+            method: 'POST',
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            return stripe.redirectToCheckout({ sessionId: data.id });
+        })
+        .then((result) => {
+            if (result.error) {
+                alert(result.error.message);
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     });
-  });
 </script>
+    <!-- Script de Stripe (asegúrate de incluir esto antes de usar Stripe) -->
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <!-- Script para funcionalidad de pago con Stripe -->
+    <script>
+        const stripe = Stripe('your-publishable-key-here');
+        const checkoutButton = document.getElementById('checkout-button');
+
+        checkoutButton?.addEventListener('click', () => {
+            fetch('/create-checkout-session', {
+                method: 'POST',
+            })
+            .then((response) => response.json())
+            .then((sessionId) => {
+                return stripe.redirectToCheckout({ sessionId });
+            })
+            .then((result) => {
+                if (result.error) {
+                    alert(result.error.message);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        // Productos disponibles
+        const products = [
+            {
+                id: 1,
+                name: "Conjunto Ejecutivo Trot Cherry/Negro",
+                price: 17664,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/p-6455-conjuto-ejecutivo-trot-cherrynegro-89d-300x300.jpg",
+                description: "Conjunto Ejecutivo Trot, brinda un imagen elegante ideal para áreas ejecutivas y directivas de trabajo a un precio económico."
+            },
+            {
+                id: 2,
+                name: "Conjunto Operativo Trot Pera/Negro",
+                price: 8200,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/p-5365-5513-300x300.jpg",
+                description: "Conjunto Operativo Trot, ideal para áreas operativas y de trabajo a un precio económico."
+            },
+            {
+                id: 3,
+                name: "Conjunto Semi-Ejecutivo Trot Cherry/Negro",
+                price: 12500,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/p-6565-5515_cherry_800x800-300x300.jpg",
+                description: "Conjunto Semi-Ejecutivo Trot, ideal para áreas ejecutivas y de trabajo a un precio económico."
+            },
+            {
+                id: 4,
+                name: "Módulo Elite Ejecutivo Bari Izquierdo Wenge",
+                price: 20000,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/204-300x300.png",
+                description: "Módulo Elite Secretarial Milan izquierdo, práctico y funcional con cajonera."
+            },
+            {
+                id: 5,
+                name: "Mesa Trapezoidal 239 Melamina Cenizo",
+                price: 3500,
+                image: "https://todooficina.com/wp-content/uploads/2021/09/258-MI10-300x300.png",
+                description: "Mesa Trapezoidal para configuraciones geométricas diversas."
+            },
+            {
+                id: 6,
+                name: "Mesa de Trabajo 645 Multiusos 1.40 cm Cenizo",
+                price: 4899,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/5262-MI12-300x300.png",
+                description: "Mesa de trabajo multiusos de fácil armado, ideal para cualquier entorno."
+            },
+            {
+                id: 7,
+                name: "Escritorio Seven SV750 Ebano boreal",
+                price: 5600,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/SV750-perspectiva-m-ebano-e-negra.jpg",
+                description: "El escritorio Seven brinda modernidad y elegancia a tu oficina, gracias a su diseño minimalista."
+            },
+            {
+                id: 8,
+                name: "Módulo L Seven SV751 Ebano boreal",
+                price: 7889,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/SV751-perspectiva-m-ebano-e-negra.jpg",
+                description: "El módulo L Seven brinda modernidad y elegancia a tu oficina, gracias a su diseño minimalista."
+            },
+            {
+                id: 9,
+                name: "Escritorio 2 Pedestales 1.82 Nova Metálico Arena",
+                price: 11899,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/p-4948-5565-mn2_800x800-300x300.jpg",
+                description: "NOVA, línea operativa por excelencia elaborada con materiales robustos de alta resistencia y durabilidad."
+            },
+            {
+                id: 10,
+                name: "Librero de Piso con 1 Entrepaño Metálico Negro",
+                price: 4200,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/6102-HM01-300x300.jpg",
+                description: "Libreros marca Hon construidos para brindar una solución duradera y adaptable a cualquier demanda de almacenamiento."
+            },
+            {
+                id: 11,
+                name: "Librero de Piso con 3 Entrepaños Metálico Arena",
+                price: 12682,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/p-4238-s60abcl_whlsl_olem_1_800x800-300x300.jpg",
+                description: "Libreros marca Hon construidos para brindar una solución duradera y adaptable a cualquier demanda de almacenamiento."
+            },
+            {
+                id: 12,
+                name: "Librero Combinado Elite 1.87 Wenge",
+                price: 11548,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/6098-ME03_3-300x300.jpg",
+                description: "Los libreros Elite agregan una moderna elegancia a su área de trabajo, permitiéndole colocar de una forma ordenada los detalles de su oficina."
+            },
+            {
+                id: 13,
+                name: "Credenza con Cajón Urban 603 Ceniza",
+                price: 6700,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/887-MI10.png",
+                description: "Brinda un toque cálido al entorno asegurando un ambiente único, se adapta fácilmente."
+            },
+            {
+                id: 14,
+                name: "Credenza con Cajón Urban 603 Ebano boreal",
+                price: 6948,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/603.1905-300x300.jpg",
+                description: "Brinda un toque cálido al entorno asegurando un ambiente único, se adapta fácilmente."
+            },
+            {
+                id: 15,
+                name: "Credenza Ejecutiva KLASS03 Blanco",
+                price: 14200,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/5021-MI06-300x300.png",
+                description: "Ofrece soluciones innovadoras para la creación de entornos de trabajo flexibles, funcionales y adaptables."
+            },
+            {
+                id: 16,
+                name: "Mesa de Juntas Enzzo 21814 (14 Personas) Blanco",
+                price: 43172,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/p-4742-5071-mn06_1_800x800-300x300.jpg",
+                description: "Mesa de juntas funcional y adaptable para 14 personas."
+            },
+            {
+                id: 17,
+                name: "Mesa de Juntas Enzzo 21810 (10 Personas) Cenizo",
+                price: 31080.57,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/5070-MI12-300x300.jpg",
+                description: "Mesa de juntas funcional y adaptable para 10 personas."
+            },
+            {
+                id: 18,
+                name: "Mesa de Juntas Filo Rectangular",
+                price: 25687,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/p-6595-5794_copy-300x300.jpg",
+                description: "Diseño de trazos suaves, versatilidad en configuraciones, creando espacios elegantes."
+            },
+            {
+                id: 19,
+                name: "Mampara con Policarbonato Privatt (marco aluminio) P12090",
+                price: 3223,
+                image: "https://todooficina.com/wp-content/uploads/2021/12/655-TL10.jpeg",
+                description: "Mampara Privatt de fácil ensamble que no requiere herramientas, ideal para privacidad en espacios de trabajo."
+            },
+            {
+                id: 20,
+                name: "Mini Mampara Principal Color Tabaco",
+                price: 1704,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/p-5204-5086-mi08.jpg",
+                description: "Mini mampara para división discreta entre escritorios, disponible en varios colores."
+            },
+            {
+                id: 21,
+                name: "Mampara Privatt con Marco de Aluminio",
+                price: 9825,
+                image: "https://todooficina.com/wp-content/uploads/2020/10/5058-300x300.jpg",
+                description: "Mampara de fácil ensamble, ideal para crear espacios laborales prácticos y adaptables."
+            }
+        ];
+
+        // Carrito de compras (definido en el ámbito global)
+        let cart = [];
+
+        // Función para inicializar el catálogo
+        function initializeCatalog() {
+            const catalog = document.getElementById('product-catalog');
+            products.forEach((product) => {
+                // Crear elementos HTML para los productos
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product';
+                
+                // Imagen
+                const img = document.createElement('img');
+                img.src = product.image;
+                img.alt = product.name;
+
+                // Nombre del producto
+                const name = document.createElement('h3');
+                name.textContent = product.name;
+
+                // Descripción
+                const description = document.createElement('p');
+                description.textContent = product.description;
+
+                // Precio
+                const price = document.createElement('p');
+                price.textContent = Precio: $${product.price.toFixed(2)};
+
+                // Botón para agregar al carrito
+                const addButton = document.createElement('button');
+                addButton.textContent = 'Agregar al Carrito';
+                addButton.onclick = () => addToCart(product.id);
+
+                // Botón para comprar ahora
+                const buyNowButton = document.createElement('button');
+                buyNowButton.textContent = 'Pagar Ahora';
+                buyNowButton.onclick = () => buyNow(product.id);
+
+                // Agregar todos los elementos al contenedor del producto
+                productDiv.appendChild(img);
+                productDiv.appendChild(name);
+                productDiv.appendChild(description);
+                productDiv.appendChild(price);
+                productDiv.appendChild(addButton);
+                productDiv.appendChild(buyNowButton);
+
+                // Agregar el producto al catálogo
+                catalog.appendChild(productDiv);
+            });
+        }
+
+        // Función para agregar productos al carrito
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingProductIndex = cart.findIndex(item => item.id === productId);
+
+            if (existingProductIndex > -1) {
+                cart[existingProductIndex].quantity += 1;
+            } else {
+                cart.push({...product, quantity: 1});
+            }
+            updateCart();
+        }
+
+        // Función para actualizar el carrito
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            cartItems.innerHTML = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <span>${item.name} (${item.quantity})</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                    <button onclick="removeFromCart(${item.id})">Eliminar</button>
+                    <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${item.id}, this.value)">
+                `;
+                cartItems.appendChild(cartItem);
+                total += item.price * item.quantity;
+            });
+
+            document.getElementById('cart-total').textContent = total.toFixed(2);
+        }
+
+        // Función para eliminar un producto del carrito
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCart();
+        }
+
+        // Función para actualizar la cantidad de un producto en el carrito
+        function updateQuantity(productId, quantity) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity = parseInt(quantity);
+                if (item.quantity <= 0) {
+                    cart = cart.filter(i => i.id !== productId);
+                }
+                updateCart();
+            }
+        }
+       // Función para el proceso de pago
+        function checkout() {
+            if (cart.length === 0) {
+                alert('El carrito está vacío.');
+                return;
+            }
+
+            alert('Gracias por su compra! Procediendo al pago...');
+            cart = [];
+            updateCart();
+        }
+
+  // Función para el proceso de pago
+        function checkout() {
+            if (cart.length === 0) {
+                alert('El carrito está vacío.');
+                return;
+            }
+
+            alert('Gracias por su compra! Procediendo al pago...');
+            cart = [];
+            updateCart();
+        }
+
+        // Función para comprar inmediatamente
+        function buyNow(productId) {
+            const product = products.find(p => p.id === productId);
+            alert(Gracias por comprar ${product.name}. Procediendo al pago...);
+            checkout();
+        }
+
+
+       // Inicializar catálogo al cargar la página
+        initializeCatalog();
+ 
+    </script>
 </body>
 </html>
