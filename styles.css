@@ -1,9 +1,80 @@
-/*Css
- Estilos globales para la página */
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+main {
+    padding: 20px;
+    background-color: #fff;
+    margin: 20px auto;
+    width: 80%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-around;
+    background-color: #444;
+    margin: 0;
+}
+
+nav ul li {
+    padding: 10px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+#shopping-cart, #login-form {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+}
+
+#cart-items, .cart-total {
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
 }
@@ -22,12 +93,31 @@ header input {
     width: 50%;
 }
 
+.navbar {
+    background-color: #444;
+    overflow: hidden;
+}
+
+.navbar a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
 #product-catalog {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
     padding: 20px;
-    width: 70%; /* Ancho predeterminado del catálogo de productos */
+    width: 70%;
 }
 
 #product-catalog .product {
@@ -43,47 +133,13 @@ header input {
 }
 
 #shopping-cart {
-    width: 25%; /* Ajusta el ancho predeterminado del carrito de compras aquí */
+    margin-top: 20px;
     padding: 20px;
-    background-color: #f4f4f4;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* Media Queries para hacer que el diseño sea responsivo */
-@media (max-width: 768px) {
-    #product-catalog {
-        width: 100%; /* Catálogo de productos toma el 100% del ancho */
-    }
-
-    #product-catalog .product {
-        width: calc(50% - 20px); /* Ajusta el ancho de los productos */
-    }
-
-    #shopping-cart {
-        width: 100%; /* Carrito de compras toma el 100% del ancho */
-    }
-}
-
-@media (max-width: 500px) {
-    #product-catalog {
-        width: 100%; /* Catálogo de productos sigue tomando el 100% del ancho */
-    }
-
-    #product-catalog .product {
-        width: calc(50% - 20px); /* Ajusta el ancho de los productos */
-    }
-
-    #shopping-cart {
-        width: 100%; /* Carrito de compras sigue tomando el 100% del ancho */
-    }
-}
-
-@media (max-width: 300px) {
-    #product-catalog .product {
-        width: 100%; /* Cada producto toma el 100% del ancho */
-    }
-
-    #shopping-cart {
-        width: 100%; /* Carrito de compras sigue tomando el 100% del ancho */
-    }
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
 }
