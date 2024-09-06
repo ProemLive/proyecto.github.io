@@ -1,40 +1,39 @@
-// Función para agregar productos al carrito
+onst products = [
+   
+];
+
+let cart = [];
+
+function initializeCatalog() {
+    const catalog = document.getElementById('product-catalog');
+    products.forEach((product) => {
+        const productDiv = document.createElement('div');
+        productDiv.className = 'product';
+        productDiv.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+            <h3>${product.name}</h3>
+            <p>${product.description}</p>
+            <p>Precio: $${product.price.toFixed(2)}</p>
+            <button onclick="addToCart(${product.id})">Agregar al Carrito</button>
+            <button onclick="buyNow(${product.id})">Pagar Ahora</button>
+        `;
+        catalog.appendChild(productDiv);
+    });
+}
+
 function addToCart(productId) {
     const product = products.find(p => p.id === productId);
     const existingProductIndex = cart.findIndex(item => item.id === productId);
 
     if (existingProductIndex > -1) {
-        // Incrementar la cantidad si el producto ya está en el carrito
         cart[existingProductIndex].quantity += 1;
     } else {
-        // Agregar nuevo producto al carrito
         cart.push({...product, quantity: 1});
     }
 
     updateCart();
 }
 
-// Función para eliminar un producto del carrito
-function removeFromCart(productId) {
-    cart = cart.filter(item => item.id !== productId);
-    updateCart();
-}
-
-// Función para modificar la cantidad de un producto en el carrito
-function updateQuantity(productId, quantity) {
-    const product = cart.find(item => item.id === productId);
-
-    if (product) {
-        product.quantity = parseInt(quantity, 10);
-        if (product.quantity <= 0) {
-            removeFromCart(productId);
-        } else {
-            updateCart();
-        }
-    }
-}
-
-// Función para actualizar el carrito
 function updateCart() {
     const cartItems = document.getElementById('cart-items');
     cartItems.innerHTML = '';
@@ -56,22 +55,17 @@ function updateCart() {
     document.getElementById('cart-total').textContent = total.toFixed(2);
 }
 
-// Función para el proceso de pago
 function checkout() {
     if (cart.length === 0) {
         alert('El carrito está vacío.');
         return;
     }
-
-    alert('Gracias por su compra! Procediendo al pago...');
-    cart = [];
-    updateCart();
+    window.location.href = "pago.html";
 }
 
-// Función para comprar inmediatamente
 function buyNow(productId) {
     const product = products.find(p => p.id === productId);
-    alert(Gracias por comprar ${product.name}. Procediendo al pago...);
+    alert(`Gracias por comprar ${product.name}. Procediendo al pago...`);
     checkout();
 }
 
